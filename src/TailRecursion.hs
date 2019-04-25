@@ -32,7 +32,15 @@ import Prelude hiding (lookup)
 -- 0
 
 assoc :: Int -> String -> [(String, Int)] -> Int
-assoc def key kvs = error "TBD:assoc"
+assoc def key (x:kvs) = if fst(x) == key
+    then snd(x)
+    else if kvs == []
+        then def
+        else assoc def key kvs
+   -- | fst(x) /= key = assoc def key kvs
+   -- | fst(x) == key = snd(x)
+   -- | kvs == []     = def
+--default searchkey listtobesearched
 
 --------------------------------------------------------------------------------
 {- | `removeDuplicates l`
@@ -59,8 +67,19 @@ removeDuplicates l = reverse (helper [] l)
     helper seen []     = seen
     helper seen (x:xs) = helper seen' rest'
       where
-        seen'          = error "TBD:helper:seen"
-        rest'          = error "TBD:helper:rest"
+        seen'          = if elem x seen
+            then seen
+            else x:[] ++ seen
+        rest'          = xs
+-- removeDuplicates [1,6,2,4,12,2,13,12,6,9,13]
+-- [1,4,2,12,6,9,13]
+{-
+= if elem x xs
+            then seen
+            else x:[] ++ seen
+--this is effectively is it in the remaining list
+-- need to do elem x seen 
+-}
 
 --------------------------------------------------------------------------------
 {- | `wwhile f x` returns `x'` where there exist values
