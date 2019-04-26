@@ -41,6 +41,13 @@ assoc def key (x:kvs) = if fst(x) == key
    -- | fst(x) == key = snd(x)
    -- | kvs == []     = def
 --default searchkey listtobesearched
+-- tail recursion is about not using the results of the previous call for computation, only calling recursive stuff on modified state.
+-- review reference for midterm; will forget.
+--https://www.geeksforgeeks.org/tail-recursion/
+--https://scienceblogs.com/goodmath/2006/12/20/tail-recursion-iteration-in-ha-1
+--http://wiki.c2.com/?TailRecursion
+--https://stackoverflow.com/questions/33923/what-is-tail-recursion
+
 
 --------------------------------------------------------------------------------
 {- | `removeDuplicates l`
@@ -80,6 +87,7 @@ removeDuplicates l = reverse (helper [] l)
 --this is effectively is it in the remaining list
 -- need to do elem x seen 
 -}
+-- are if-then-else statements naturally tail recursive?
 
 --------------------------------------------------------------------------------
 {- | `wwhile f x` returns `x'` where there exist values
