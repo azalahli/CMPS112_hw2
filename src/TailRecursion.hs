@@ -106,7 +106,11 @@ removeDuplicates l = reverse (helper [] l)
 -- 512
 
 wwhile :: (a -> (Bool, a)) -> a -> a
-wwhile f n = error "TBD:wwhile"
+--wwhile f n = (snd(f (snd(f n))))
+wwhile f n = wwhile f (snd(f n))
+-- need a wwhile f n and a snd()
+-- snd (f n) gives me 8, which is expected
+-- fucking () associativity
 
 --------------------------------------------------------------------------------
 {- | The **fixpoint** of a function `f` starting at `x`
