@@ -154,7 +154,7 @@ wwhile f n = if fst(f n)
 fixpointL :: (Int -> Int) -> Int -> [Int]
 fixpointL f x = if f x == x
     then [f x]
-    else (f x):[] ++ (fixpointL f (f x))
+    else (x):[] ++ (fixpointL f (f x))
 --this doesn't specify tail recursion?
 --rip
 -- reverse
