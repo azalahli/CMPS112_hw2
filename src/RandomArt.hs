@@ -114,6 +114,11 @@ eval x y (Sine e) = sin(pi * eval x y e)
 -- isn't this two doubles?
 -- div is for ints derp
 eval x y (Average e1 e2) = ((eval x y e1) + (eval x y e2)) / 2
+eval x y (Cosine e) = cos(pi * eval x y e)
+eval x y (Times e1 e2) = (eval x y e1) * (eval x y e2)
+eval x y (Thresh e1 e2 e3 e4) = if (eval x y e1) < (eval x y e2)
+    then (eval x y e3)
+    else (eval x y e4)
 --eval x y e = 
 
 evalFn :: Double -> Double -> Expr -> Double
