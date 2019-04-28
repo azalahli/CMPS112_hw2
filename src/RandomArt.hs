@@ -97,12 +97,24 @@ exprToString (Thresh e1 e2 e3 e4) = "(" ++ exprToString e1 ++ "<" ++ exprToStrin
 --
 -- >>> eval  0.3 0.3    sampleExpr0
 -- 0.8090169943749475
---
+-- 0.8090169943749475
 -- >>> eval  0.5 0.2    sampleExpr2
 -- 0.8090169943749475
 
 eval :: Double -> Double -> Expr -> Double
-eval x y e = error "TBD:eval"
+--eval (Double x) = x
+--eval (Double y) = y
+--eval (Sine z) = sin z
+--eval (Cosine z) = cos z
+--eval (Average x y) = (x + y) `div` 2
+--eval (Times x y) = x * y
+eval x y VarX = x
+eval x y VarY = y
+eval x y (Sine e) = sin(pi * eval x y e)
+-- isn't this two doubles?
+-- div is for ints derp
+eval x y (Average e1 e2) = ((eval x y e1) + (eval x y e2)) / 2
+--eval x y e = 
 
 evalFn :: Double -> Double -> Expr -> Double
 evalFn x y e = assert (-1.0 <= rv && rv <= 1.0) rv
