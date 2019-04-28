@@ -158,7 +158,12 @@ build 0
   | otherwise = VarY
   where
     r         = rand 10
-build d       = error "TBD:build"
+build d       
+  | ra < 2 = Average (build(d-1)) (build(d-1))
+  | (2 < ra) && (ra < 9) = Cosine (build(d-1))
+  | otherwise = Times (Sine (build((d-1)))) VarX
+  where
+    ra = rand 10
 
 --------------------------------------------------------------------------------
 -- | Best Image "Seeds" --------------------------------------------------------
