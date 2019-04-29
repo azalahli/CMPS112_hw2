@@ -25,6 +25,8 @@ data Expr
   | Average Expr Expr
   | Times   Expr Expr
   | Thresh  Expr Expr Expr Expr
+  | Sqrt    Expr
+  | TriExpr Expr Expr Expr
   deriving (Show)
 
 --------------------------------------------------------------------------------
@@ -87,6 +89,8 @@ exprToString (Cosine e)           = "cos(pi*" ++ exprToString e ++")"
 exprToString (Average e1 e2)      = "((" ++ exprToString e1 ++ "+" ++ exprToString e2 ++ ")/2)"
 exprToString (Times e1 e2)        = exprToString e1 ++ "*" ++ exprToString e2
 exprToString (Thresh e1 e2 e3 e4) = "(" ++ exprToString e1 ++ "<" ++ exprToString e2 ++ "?" ++ exprToString e3 ++ ":" ++ exprToString e4 ++ ")"
+exprToString (Sqrt e)             = "((" ++ exprToString e ++ ")^(1/2))"
+exprToString (TriExpr e1 e2 e3)   = "((" ++ exprToString e1 ++ "+" ++ exprToString e2 ++ "+((" ++ exprToString e3 ++ ")*2))/4)"
 
 --------------------------------------------------------------------------------
 -- | Evaluating Expressions at a given X, Y co-ordinate ------------------------
@@ -119,6 +123,8 @@ eval x y (Times e1 e2) = (eval x y e1) * (eval x y e2)
 eval x y (Thresh e1 e2 e3 e4) = if (eval x y e1) < (eval x y e2)
     then (eval x y e3)
     else (eval x y e4)
+eval x y (Sqrt e) = sqrt(eval x y e)
+eval x y (TriExpr e1 e2 e3) = ((eval x y e1) + (eval x y e2) + ((eval x y e3) * 2)) / 4
 --eval x y e = 
 
 evalFn :: Double -> Double -> Expr -> Double
@@ -159,11 +165,17 @@ build 0
   where
     r         = rand 10
 build d       
-  | ra < 2 = Average (build(d-1)) (build(d-1))
-  | (2 < ra) && (ra < 9) = Cosine (build(d-1))
-  | otherwise = Times (Sine (build((d-1)))) VarX
+  | ra < 2                  = Average (build(d-1)) (build(d-1))
+  | (2 < ra) && (ra < 9)    = Cosine (build(d-1))
+  | (9 < ra) && (ra < 12)   = Times (Sqrt(build(d-1))) (Sine (build(d-1)))
+  | (12 < ra) && (ra < 14)  = Thresh (build(d-1)) (Sqrt(build(d-1))) (Cosine(Sine (build(d-1)))) (Sine (build(d-1)))
+  | (14 < ra) && (ra < 16)  = TriExpr (Cosine(build(d-1))) (Sine(build(d-1))) (build(d-1))
+  | otherwise               = Times (Sine (build((d-1)))) (build(d-1))
   where
-    ra = rand 10
+    ra = rand 4 * rand 4
+-- normalized dist
+-- add add to expr
+-- i guess i'll do pics past the 2 exprs
 
 --------------------------------------------------------------------------------
 -- | Best Image "Seeds" --------------------------------------------------------
@@ -171,16 +183,16 @@ build d
 
 -- grayscale
 g1, g2, g3 :: (Int, Int)
-g1 = (error "TBD:depth1", error "TBD:seed1")
-g2 = (error "TBD:depth2", error "TBD:seed2")
-g3 = (error "TBD:depth3", error "TBD:seed3")
+g1 = (9, 324)
+g2 = (15, 9742)
+g3 = (18, 2)
 
 
 -- grayscale
 c1, c2, c3 :: (Int, Int)
-c1 = (error "TBD:depth1", error "TBD:seed1")
-c2 = (error "TBD:depth2", error "TBD:seed2")
-c3 = (error "TBD:depth3", error "TBD:seed3")
+c1 = (10, 90)
+c2 = (10, 1337)
+c3 = (12, 1337)
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
